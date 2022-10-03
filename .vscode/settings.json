@@ -4,21 +4,17 @@
     "**/__pycache__": true,
     ".venv": true,
   },
+  "python.formatting.provider": "black",
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.black-formatter"
+  },
   "editor.formatOnSave": true,
   "editor.formatOnPaste": false,
   "editor.formatOnType": true,
   "[html]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
-    // "editor.defaultFormatter": "vscode.emmet"
   },
   "[json]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "python.formatting.provider": "black",
-  // "emmet.includeLanguages": {
-  //   "jinja-html": "html"
-  // },
-  // "files.associations": {
-  //   "*.html": "jinja-html"
-  // },
 }
