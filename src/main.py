@@ -14,12 +14,11 @@ api = sly.Api()
 # Part 1: Create labels with binding and upload them to server #
 ################################################################
 
+
 workspace_id = int(os.environ["CONTEXT_WORKSPACEID"])
 
 # create empty project with one dataset on server
-project = api.project.create(
-    workspace_id, name="tutorial-bindings", change_name_if_conflict=True
-)
+project = api.project.create(workspace_id, name="tutorial-bindings", change_name_if_conflict=True)
 dataset = api.dataset.create(project.id, name="dataset-01")
 print(f"Open project in browser: {project.url}")
 
