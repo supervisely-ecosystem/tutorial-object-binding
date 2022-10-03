@@ -5,22 +5,20 @@ import cv2
 import uuid
 import supervisely as sly
 
-# for convenient debug, has no effect in production
+
 load_dotenv("local.env")
 load_dotenv(os.path.expanduser("~/supervisely.env"))
+api = sly.Api()
 
 ################################################################
 # Part 1: Create labels with binding and upload them to server #
 ################################################################
 
-
-api = sly.Api()
-
 workspace_id = int(os.environ["CONTEXT_WORKSPACEID"])
 
 # create empty project with one dataset on server
 project = api.project.create(
-    workspace_id, name="tytorial-bindings", change_name_if_conflict=True
+    workspace_id, name="tutorial-bindings", change_name_if_conflict=True
 )
 dataset = api.dataset.create(project.id, name="dataset-01")
 print(f"Open project in browser: {project.url}")
@@ -65,7 +63,7 @@ for label in ann.labels:
 api.annotation.upload_ann(image_info.id, ann)
 
 # comment to test part 2
-exit(0)
+# exit(0)
 
 ################################################################
 # Part 2: Work with existing binding
@@ -78,19 +76,19 @@ project_meta = sly.ProjectMeta.from_json(api.project.get_meta(project.id))
 ann_json = api.annotation.download_json(image_info.id)
 ann = sly.Annotation.from_json(ann_json, meta)
 
-# access to binnding keys
+# access to binding keys
 print("Labels bindings:")
 for label in ann.labels:
     print(label.binding_key)
 
 # get all binding groups
-binds = ann.get_bindings()
-for i, (binding_key, labels) in enumerate(binds.items()):
+groups = ann.get_bindings()
+for i, (binding_key, labels) in enumerate(groups.items()):
     if binding_key is not None:
         print(f"Group # {i} [key={binding_key}] has {len(labels)} labels")
     else:
         # Binding key None defines all labels that do not belong to any binding group
-        print(f"{len(labels)} labels do not have any labels")
+        print(f"{len(labels)} labels do not have binding")
 
 # discard binding for some labels. For example for all labels of class car
 for label in ann.labels:
