@@ -16,7 +16,6 @@ load_dotenv(os.path.expanduser("~/supervisely.env"))
 
 api = sly.Api()
 
-team_id = int(os.environ["CONTEXT_TEAMID"])
 workspace_id = int(os.environ["CONTEXT_WORKSPACEID"])
 
 # create empty project with one dataset on server
