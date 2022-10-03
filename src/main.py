@@ -62,7 +62,7 @@ for label in ann.labels:
 api.annotation.upload_ann(image_info.id, ann)
 
 # comment to test part 2
-# exit(0)
+exit(0)
 
 ################################################################
 # Part 2: Work with existing binding
