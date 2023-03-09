@@ -5,9 +5,9 @@ import cv2
 import uuid
 import supervisely as sly
 
-
-load_dotenv("local.env")
-load_dotenv(os.path.expanduser("~/supervisely.env"))
+if sly.is_development():
+    load_dotenv("local.env")
+    load_dotenv(os.path.expanduser("~/supervisely.env"))
 api = sly.Api()
 
 ################################################################
@@ -15,7 +15,7 @@ api = sly.Api()
 ################################################################
 
 
-workspace_id = int(os.environ["CONTEXT_WORKSPACEID"])
+workspace_id = sly.env.workspace_id()
 
 # create empty project with one dataset on server
 project = api.project.create(workspace_id, name="tutorial-bindings", change_name_if_conflict=True)
