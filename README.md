@@ -1,28 +1,26 @@
 # Objects binding
 
-[Read this tutorial in developer portal.](https://developer.supervise.ly/advanced-user-guide/objects-binding)
-
 ## Introduction
 
 For some labeling scenarios, it is needed to group objects. Let's consider the case when you need to label object parts and then group them together. Such binding will help you distinguish parts of different objects. In this tutorial, you will learn how to programmatically group objects together (binding) and how to work with existing bindings.
 
-📗 Everything you need to reproduce [this tutorial is on GitHub](https://github.com/supervisely-ecosystem/tutorial-object-binding): source code and demo data.
+{% hint style="info" %}
+Everything you need to reproduce [this tutorial is on GitHub](https://github.com/supervisely-ecosystem/tutorial-object-binding): source code and demo data.
+{% endhint %}
 
-In this tutorial, we will create binding for the labeled parts of a sing car:
+In this tutorial, we will create binding for the labeled parts of a single car:
 
 <figure><img src="https://user-images.githubusercontent.com/12828725/193514807-3769b26a-bca5-4200-9698-a31117e0c280.gif" alt=""><figcaption><p>Imput image and masks</p></figcaption></figure>
 
 This tutorial consists of two parts:
 
-**Part 1.** Create labels with binding and upload them to Supervisely server.&#x20;
+****[**Part 1**](objects-binding.md#part-1.-create-labels-with-binding-and-upload-them-to-server)**.** Create labels with binding and upload them to Supervisely server.&#x20;
 
-**Part 2.** Methods needed to work with existing bindings.
+****[**Part 2**](objects-binding.md#part-2-work-with-existing-binding)**.** Methods needed to work with existing bindings.
 
 ## How to debug this tutorial
 
-**Step 1.** Prepare `~/supervisely.env` file with credentials. [Learn more here.](https://developer.supervise.ly/getting-started/basics-of-authentication#how-to-use-in-python)
-
-
+**Step 1.** Prepare  `~/supervisely.env` file with credentials. [Learn more here.](../getting-started/basics-of-authentication.md#use-.env-file-recommended)
 
 **Step 2.** Clone [repository](https://github.com/supervisely-ecosystem/tutorial-object-binding) with source code and demo data and create [Virtual Environment](https://docs.python.org/3/library/venv.html).
 
@@ -38,10 +36,10 @@ cd tutorial-object-binding
 code -r .
 ```
 
-**Step 4.** change ✅ workspace ID ✅ in `local.env` file by copying the ID from the context menu of the workspace. A new project with demo data will be created in the workspace you define:
+**Step 4.**   change ✅ workspace ID ✅ in `local.env` file by copying the ID from the context menu of the workspace. A new project with demo data will be created in the workspace you define:
 
 ```python
-CONTEXT_WORKSPACEID=619 # ⬅️ change value
+WORKSPACE_ID=619 # ⬅️ change value
 ```
 
 ![Copy workspace ID from context menu](https://user-images.githubusercontent.com/12828725/181572645-f042c4d0-fcb5-48db-bf11-b74b3c37e031.gif)
@@ -66,17 +64,18 @@ import supervisely as sly
 Init API for communicating with Supervisely Instance. First, we load environment variables with credentials and workspace ID:
 
 ```python
-load_dotenv("local.env")
-load_dotenv(os.path.expanduser("~/supervisely.env"))
+if sly.is_development():
+    load_dotenv("local.env")
+    load_dotenv(os.path.expanduser("~/supervisely.env"))
 api = sly.Api()
 ```
 
 ### Create project
 
-Create empty project with name **"tutorial-bindings"** with one dataset **"dataset-01"** in your workspace on server. If the project with the same name exists in your dataset, it will be automatically renamed (tutorial-bindings_001, tutorial-bindings_002, etc ...) to avoid name collisions.&#x20;
+Create empty project with name **"tutorial-bindings"** with one dataset **"dataset-01"** in your workspace on server. If the project with the same name exists in your dataset, it will be automatically renamed (tutorial-bindings\_001, tutorial-bindings\_002, etc ...) to avoid name collisions.&#x20;
 
 ```python
-workspace_id = int(os.environ["CONTEXT_WORKSPACEID"])
+workspace_id = sly.env.workspace_id()
 
 project = api.project.create(workspace_id, name="tutorial-bindings", change_name_if_conflict=True)
 dataset = api.dataset.create(project.id, name="dataset-01")
@@ -107,7 +106,7 @@ height, width = cv2.imread(image_path).shape[0:2]
 
 ### Read masks and create sly.Annotation
 
-More details about how to create labels can be found in [this tutorial](../getting-started/spatial-labels.md).
+More details about how to create labels can be found in [this tutorial](../getting-started/python-sdk-tutorials/spatial-labels.md).
 
 ```python
 # create Supervisely annotation from masks images
